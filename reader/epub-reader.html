@@ -11,6 +11,7 @@
 </head>
 <body>
     <div id="viewer"></div>
+    <div id="error-message" style="display: none; color: red; text-align: center; padding: 20px;"></div>
     <script>
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
@@ -21,7 +22,20 @@
             width: "100%",
             height: "100%"
         });
-        rendition.display();
+
+        rendition.display(bookPart).catch(error => {
+            console.error('加载EPUB文件时出错:', error);
+            document.getElementById('error-message').textContent = `加载EPUB文件时出错: ${error.message}`;
+            document.getElementById('error-message').style.display = 'block';
+        });
+
+        book.ready.then(() => {
+            console.log('EPUB文件已成功加载');
+        }).catch(error => {
+            console.error('EPUB文件加载失败:', error);
+            document.getElementById('error-message').textContent = `EPUB文件加载失败: ${error.message}`;
+            document.getElementById('error-message').style.display = 'block';
+        });
     </script>
 </body>
 </html>
