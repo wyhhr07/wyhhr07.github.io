@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>EPUB Reader</title>
-    <script src="/reader/js/epub.min.js"></script>
+    <script src="/readerjs/epub.min.js"></script>
     <style>
         body { margin: 0; }
         #viewer { height: 100vh; }
@@ -14,14 +14,14 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
-        const location = params.get('location');
+        const bookPart = params.get('part');
         const bookPath = `../${bookName}`;
         const book = ePub(bookPath);
         const rendition = book.renderTo("viewer", {
             width: "100%",
             height: "100%"
         });
-        rendition.display(location);
+        rendition.display(bookPart);
     </script>
 </body>
 </html>
