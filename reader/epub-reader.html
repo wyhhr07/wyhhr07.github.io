@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>EPUB Reader</title>
+    <script src="/js/epub.min.js"></script>
+    <style>
+        body { margin: 0; }
+        #viewer { height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="viewer"></div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const bookName = params.get('book');
+        const location = params.get('location');
+        const bookPath = `../${bookName}`;
+        const book = ePub(bookPath);
+        const rendition = book.renderTo("viewer", {
+            width: "100%",
+            height: "100%"
+        });
+        rendition.display(location);
+    </script>
+</body>
+</html>
