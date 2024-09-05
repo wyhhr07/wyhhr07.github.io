@@ -48,8 +48,18 @@
             width: "100%",
             height: "100%"
         });
+
         rendition.display().then(() => {
             document.getElementById('loading').style.display = 'none';
+        }).catch(error => {
+            console.error('加载EPUB时出错:', error);
+            document.getElementById('loading').innerHTML = '加载失败，请检查文件路径或刷新页面';
+        });
+
+        // 添加错误处理
+        book.on('openFailed', function(error) {
+            console.error('打开EPUB文件失败:', error);
+            document.getElementById('loading').innerHTML = '打开文件失败，请检查文件是否存在';
         });
     </script>
 </body>
