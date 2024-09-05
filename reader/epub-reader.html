@@ -23,10 +23,22 @@
             height: "100%"
         });
 
-        // 等待书籍加载完成后再显示指定页面
-        book.ready.then(() => {
-            rendition.display(bookPart);
-        });
+            // 等待书籍加载完成后再显示指定页面
+            book.ready.then(() => {
+                // 添加短暂延迟(100)，确保渲染完成
+                setTimeout(() => {
+                    rendition.display(bookPart)
+                        .then(() => {
+                            console.log("显示指定页面成功");
+                        })
+                        .catch(error => {
+                            console.error("显示指定页面失败:", error);
+                            rendition.display();
+                        });
+                }, 100);
+            }).catch(error => {
+                console.error("加载书籍时出错:", error);
+            });
     </script>
 </body>
 </html>
