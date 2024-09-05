@@ -42,7 +42,11 @@
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
         const bookPart = params.get('part');
-        const bookPath = `../${bookName}`;
+        // 修改文件路径
+        const bookPath = `/${encodeURIComponent(bookName)}`;
+        
+        console.log('尝试加载的文件路径:', bookPath);
+
         const book = ePub(bookPath);
         const rendition = book.renderTo("viewer", {
             width: "100%",
