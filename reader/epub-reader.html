@@ -22,7 +22,11 @@
             width: "100%",
             height: "100%"
         });
-        rendition.display(bookPart);
+
+        // 等待书籍加载完成后再显示指定页面
+        book.ready.then(() => {
+            rendition.display(bookPart);
+        });
     </script>
 </body>
 </html>
