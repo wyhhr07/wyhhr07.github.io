@@ -3,69 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>EPUB Reader</title>
-    <script src="./js/zip.min.js"></script>
-    <script src="./js/epub.min.js"></script>
+    <script src="/reader/js/zip.min.js"></script>
+    <script src="/reader/js/epub.min.js"></script>
     <style>
         body { margin: 0; }
         #viewer { height: 100vh; }
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
-    <div id="loading">
-        <div class="spinner"></div>
-    </div>
     <div id="viewer"></div>
     <script>
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
         const bookPart = params.get('part');
-        // 修改文件路径
         const bookPath = `https://wyhhr07.github.io/${encodeURIComponent(bookName)}`;
-        
-        console.log('尝试加载的文件路径:', bookPath);
-
         const book = ePub(bookPath);
         const rendition = book.renderTo("viewer", {
             width: "100%",
             height: "100%"
         });
-
-        rendition.display().then(() => {
-            document.getElementById('loading').style.display = 'none';
-        }).catch(error => {
-            console.error('加载EPUB时出错:', error);
-            document.getElementById('loading').innerHTML = '加载失败，请检查文件路径或刷新页面';
-        });
-
-        // 添加错误处理
-        book.on('openFailed', function(error) {
-            console.error('打开EPUB文件失败:', error);
-            document.getElementById('loading').innerHTML = '打开文件失败，请检查文件是否存在';
-        });
+        rendition.display(bookPart);
     </script>
 </body>
 </html>
