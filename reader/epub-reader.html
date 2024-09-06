@@ -35,6 +35,7 @@
                 .then(() => {
                     if (hasAnch) {
                         const anchor = document.querySelector(bookAnch);
+                        console.log("加载锚点成功", anchor);
                         anchor.scrollIntoView();
                     }
                     console.log("显示指定页面成功");
@@ -44,7 +45,7 @@
                     rendition.display();
                 });
         }).catch(error => {
-            console.error("加载书籍时出错:", error);
+            console.error("加载书籍失败:", error);
         });
     </script>
 </body>
