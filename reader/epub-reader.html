@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>EPUB Reader</title>
-    <script src="/reader/js/zip.min.js"></script>
-    <script src="/reader/js/epub.min.js"></script>
+    <script src="js/zip.min.js"></script>
+    <script src="js/epub.min.js"></script>
     <style>
         body { margin: 0; }
         #viewer { height: 100vh; }
@@ -42,7 +42,7 @@
         const bookName = params.get('book');
         const bookPart = params.get('part');
         const bookAnch = window.location.hash;
-        
+
         const book = ePub(`https://wyhhr07.github.io/${encodeURIComponent(bookName)}`);
         const rendition = book.renderTo("viewer", {
             flow: "scrolled-doc",
@@ -50,26 +50,29 @@
             height: "100%"
         });
 
-        book.ready.then(() => {
-            rendition.display(bookPart)
-                .then(() => {
+        async function initializeBook() {
+            try {
+                await book.ready;
+                try {
+                    await rendition.display(bookPart);
                     if (bookAnch) {
                         const iframe = document.querySelector('iframe');
                         const anchor = iframe.contentDocument.querySelector(bookAnch);
                         anchor.scrollIntoView();
                     }
                     console.log("显示指定页面成功");
-                    document.getElementById('loader').style.display = 'none';
-                })
-                .catch(error => {
-                    rendition.display();
-                    console.error("显示指定页面失败:", error);
-                    document.getElementById('loader').style.display = 'none';
-                });
-        }).catch(error => {
-            console.error("加载书籍失败:", error);
-            document.getElementById('loader').style.display = 'none';
-        });
+                } catch (error) {
+                    await rendition.display();
+                    console.error("显示指定页面失败", error);
+                }
+            } catch (error) {
+                console.error("加载书籍失败", error);
+            } finally {
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+
+        initializeBook();
     </script>
 </body>
 </html>
