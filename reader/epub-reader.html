@@ -16,7 +16,9 @@
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
         const bookPart = params.get('part');
+        console.log(bookPart);
         const hasAnch = bookPart.includes('#');
+        console.log(hasAnch);
         if (hasAnch) {
             const parts = bookPart.split('#');
             bookPart = parts[0];
