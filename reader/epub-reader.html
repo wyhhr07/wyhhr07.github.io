@@ -16,14 +16,7 @@
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
         const bookPart = params.get('part');
-        console.log(bookPart);
-        const hasAnch = bookPart.includes('#');
-        console.log(hasAnch);
-        if (hasAnch) {
-            const parts = bookPart.split('#');
-            bookPart = parts[0];
-            bookAnch = '#' + parts[1];
-        }
+        const bookAnch = window.location.hash;
         const book = ePub(`https://wyhhr07.github.io/${encodeURIComponent(bookName)}`);
         const rendition = book.renderTo("viewer", {
             flow: "scrolled-doc",
@@ -35,7 +28,7 @@
         book.ready.then(() => {
             rendition.display(bookPart)
                 .then(() => {
-                    if (hasAnch) {
+                    if (bookAnch) {
                         const anchor = document.querySelector(bookAnch);
                         console.log("加载锚点成功", anchor);
                         anchor.scrollIntoView();
