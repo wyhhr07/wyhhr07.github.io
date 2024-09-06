@@ -16,8 +16,13 @@
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
         const bookPart = params.get('part');
-        const bookPath = `https://wyhhr07.github.io/${encodeURIComponent(bookName)}`;
-        const book = ePub(bookPath);
+        const hasAnch = bookPart.includes('#');
+        if (hasAnch) {
+            const parts = bookPart.split('#');
+            bookPart = parts[0];
+            bookAnch = '#' + parts[1];
+        }
+        const book = ePub(`https://wyhhr07.github.io/${encodeURIComponent(bookName)}`);
         const rendition = book.renderTo("viewer", {
             width: "100%",
             height: "100%"
@@ -27,6 +32,10 @@
         book.ready.then(() => {
             rendition.display(bookPart)
                 .then(() => {
+                    if (hasAnch) {
+                        const anchor = document.querySelector(bookAnch);
+                        anchor.scrollIntoView();
+                    }
                     console.log("显示指定页面成功");
                 })
                 .catch(error => {
