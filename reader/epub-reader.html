@@ -8,15 +8,41 @@
     <style>
         body { margin: 0; }
         #viewer { height: 100vh; }
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+    <div id="loader"><div class="spinner"></div></div>
     <div id="viewer"></div>
     <script>
         const params = new URLSearchParams(window.location.search);
         const bookName = params.get('book');
         const bookPart = params.get('part');
         const bookAnch = window.location.hash;
+        
         const book = ePub(`https://wyhhr07.github.io/${encodeURIComponent(bookName)}`);
         const rendition = book.renderTo("viewer", {
             flow: "scrolled-doc",
@@ -24,7 +50,6 @@
             height: "100%"
         });
 
-        // 等待书籍加载完成后再显示指定页面
         book.ready.then(() => {
             rendition.display(bookPart)
                 .then(() => {
@@ -34,13 +59,16 @@
                         anchor.scrollIntoView();
                     }
                     console.log("显示指定页面成功");
+                    document.getElementById('loader').style.display = 'none';
                 })
                 .catch(error => {
-                    console.error("显示指定页面失败:", error);
                     rendition.display();
+                    console.error("显示指定页面失败:", error);
+                    document.getElementById('loader').style.display = 'none';
                 });
         }).catch(error => {
             console.error("加载书籍失败:", error);
+            document.getElementById('loader').style.display = 'none';
         });
     </script>
 </body>
