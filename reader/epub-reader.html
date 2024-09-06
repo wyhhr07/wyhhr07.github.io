@@ -29,8 +29,8 @@
             rendition.display(bookPart)
                 .then(() => {
                     if (bookAnch) {
-                        console.log("加载锚点成功", bookAnch);
-                        const anchor = document.querySelector(bookAnch);
+                        const iframe = document.querySelector('iframe');
+                        const anchor = iframe.contentDocument.querySelector(bookAnch);
                         anchor.scrollIntoView();
                     }
                     console.log("显示指定页面成功");
