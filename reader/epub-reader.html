@@ -38,14 +38,16 @@
     <div id="loader"><div class="spinner"></div></div>
     <div id="viewer"></div>
     <script>
-        const params = new URLSearchParams(window.location.search);
+        const { search, hash } = window.location;
+        const params = new URLSearchParams(search);
         const bookName = params.get('book');
         const bookPart = params.get('part');
-        const bookAnch = window.location.hash;
+        const bookAnch = hash;
 
         const book = ePub(`https://wyhhr07.github.io/${encodeURIComponent(bookName)}`);
         const rendition = book.renderTo("viewer", {
             flow: "scrolled-doc",
+            snap: "true",
             width: "100%",
             height: "100%"
         });
