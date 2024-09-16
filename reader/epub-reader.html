@@ -57,7 +57,7 @@
             try {
                 await book.ready;
                 try {
-                    await rendition.display(bookPart, { method: 'start' });
+                    await rendition.display(bookPart, { offset: 0 });
                     if (bookAnch) {
                         const iframe = document.querySelector('iframe');
                         const anchor = iframe.contentDocument.querySelector(bookAnch);
