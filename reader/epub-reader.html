@@ -57,11 +57,11 @@
             try {
                 await book.ready;
                 try {
-                    await rendition.display(bookPart);
+                    await rendition.display(bookPart, { method: 'start' });
                     if (bookAnch) {
                         const iframe = document.querySelector('iframe');
                         const anchor = iframe.contentDocument.querySelector(bookAnch);
-                        anchor.scrollIntoView({ block: 'start' });
+                        anchor.scrollIntoView();
                     }
                     console.log("显示指定页面成功");
                 } catch (error) {
