@@ -48,7 +48,7 @@
         const book = ePub(`https://wyhhr07.github.io/${encodeURIComponent(bookName)}`);
         const rendition = book.renderTo("viewer", {
             manager: 'continuous',
-            flow: "scrolled",
+            flow: "scrolled-doc",
             width: "100%",
             height: "100%"
         });
@@ -57,7 +57,7 @@
             try {
                 await book.ready;
                 try {
-                    await rendition.display(bookPart, { offset: 1 });
+                    await rendition.display(bookPart, { offset: 0 });
                     if (bookAnch) {
                         const iframe = document.querySelector('iframe');
                         const anchor = iframe.contentDocument.querySelector(bookAnch);
