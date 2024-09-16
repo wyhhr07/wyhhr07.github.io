@@ -61,7 +61,7 @@
                     if (bookAnch) {
                         const iframe = document.querySelector('iframe');
                         const anchor = iframe.contentDocument.querySelector(bookAnch);
-                        anchor.scrollIntoView();
+                        anchor.scrollIntoView({ block: 'start' });
                     }
                     console.log("显示指定页面成功");
                 } catch (error) {
