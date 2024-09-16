@@ -50,14 +50,15 @@
             manager: 'continuous',
             flow: "scrolled-doc",
             width: "100%",
-            height: "100%"
+            height: "100%",
+            offset: 0
         });
 
         async function initializeBook() {
             try {
                 await book.ready;
                 try {
-                    await rendition.display(bookPart, { offset: 0 });
+                    await rendition.display(bookPart);
                     if (bookAnch) {
                         const iframe = document.querySelector('iframe');
                         const anchor = iframe.contentDocument.querySelector(bookAnch);
