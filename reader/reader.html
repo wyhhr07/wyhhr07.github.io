@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reader</title>
+    <script src="foliate/view.js"></script>
+  </head>
+  <body>
+    <div id="viewer"></div>
+    <script>
+      const { search, hash } = window.location;
+      const params = new URLSearchParams(search);
+      const bookName = params.get("book");
+      const bookPart = params.get("part");
+      const bookAnch = hash;
+
+      async function initializeBook() {
+        const viewer = document.getElementById("viewer");
+        await viewer.open(`https://wyhhr07.github.io/${encodeURIComponent(bookName)}`);
+        // if (bookPart) {
+        //   await viewer.goTo(bookPart);
+        // }
+      }
+
+      initializeBook();
+    </script>
+  </body>
+</html>
