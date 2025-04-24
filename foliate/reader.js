@@ -240,7 +240,7 @@ const bookPart = params.get("part")
 const bookAnch = hash
 
 if (bookName) {
-    open(bookName)
+    open(`/${encodeURIComponent(bookName)}`)
         .then(async () => {
             await new Promise(resolve => setTimeout(resolve, 500))
             if (bookPart) {
