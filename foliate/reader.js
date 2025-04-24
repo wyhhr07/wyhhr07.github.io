@@ -237,18 +237,18 @@ const { search, hash } = window.location
 const params = new URLSearchParams(search)
 const bookName = params.get("book")
 const bookPart = params.get("part")
-const bookAnch = hash
+const bookAnchor = hash
+console.log(bookPart)
+console.log(bookAnchor)
 
 if (bookName) {
     open(`/${encodeURIComponent(bookName)}`)
         .then(async () => {
             await new Promise(resolve => setTimeout(resolve, 500))
             if (bookPart) {
-                if (bookAnch) {
-                    bookPart = bookPart + bookAnch
-                }
-                console.log(bookPart)
-                return reader.view.goTo(bookPart)
+                const bookTarget = bookAnch ? bookPart + bookAnch : bookPart
+                console.log(bookTarget)
+                return reader.view.goTo(bookTarget)
             }
         })
         .catch(e => {
