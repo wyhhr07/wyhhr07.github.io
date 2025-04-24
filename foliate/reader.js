@@ -247,6 +247,7 @@ if (bookName) {
                 if (bookAnch) {
                     bookPart = bookPart + bookAnch
                 }
+                console.log(bookPart)
                 return reader.view.goTo(bookPart)
             }
         })
