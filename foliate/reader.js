@@ -233,7 +233,26 @@ $('#file-input').addEventListener('change', e =>
     open(e.target.files[0]).catch(e => console.error(e)))
 $('#file-button').addEventListener('click', () => $('#file-input').click())
 
-const params = new URLSearchParams(location.search)
-const url = params.get('url')
-if (url) open(url).catch(e => console.error(e))
-else dropTarget.style.visibility = 'visible'
+const { search, hash } = window.location
+const params = new URLSearchParams(search)
+const bookName = params.get("book")
+const bookPart = params.get("part")
+const bookAnch = hash
+
+if (bookName) {
+    open(bookName)
+        .then(async () => {
+            await new Promise(resolve => setTimeout(resolve, 500))
+            if (bookPart) {
+                if (bookAnch) {
+                    bookPart = bookPart + bookAnch
+                }
+                return reader.view.goTo(bookPart)
+            }
+        })
+        .catch(e => {
+            console.error(e)
+        })
+} else {
+    dropTarget.style.visibility = 'visible'
+}
