@@ -238,16 +238,13 @@ const params = new URLSearchParams(search)
 const bookName = params.get("book")
 const bookPart = params.get("part")
 const bookAnchor = hash
-console.log(bookPart)
-console.log(bookAnchor)
 
 if (bookName) {
     open(`/${encodeURIComponent(bookName)}`)
         .then(async () => {
             await new Promise(resolve => setTimeout(resolve, 500))
             if (bookPart) {
-                const bookTarget = bookAnch ? bookPart + bookAnch : bookPart
-                console.log(bookTarget)
+                const bookTarget = bookAnchor ? bookPart + bookAnchor : bookPart
                 return reader.view.goTo(bookTarget)
             }
         })
