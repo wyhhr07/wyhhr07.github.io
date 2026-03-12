@@ -235,22 +235,26 @@ $('#file-button').addEventListener('click', () => $('#file-input').click())
 
 const { search, hash } = window.location
 const params = new URLSearchParams(search)
+
 const bookName = params.get("book")
 const bookPart = params.get("part")
 const bookAnchor = hash
 
-if (bookName) {
-    open(`/${encodeURIComponent(bookName)}`)
-        .then(async () => {
-            await new Promise(resolve => setTimeout(resolve, 500))
-            if (bookPart) {
-                const bookTarget = bookAnchor ? bookPart + bookAnchor : bookPart
-                return reader.view.goTo(bookTarget)
-            }
-        })
-        .catch(e => {
-            console.error(e)
-        })
-} else {
-    dropTarget.style.visibility = 'visible'
+async function init() {
+    if (!bookName) {
+        dropTarget.style.visibility = "visible"
+        return
+    }
+    try {
+        await open(`/${encodeURIComponent(bookName)}`)
+
+        if (bookPart) {
+            const target = bookAnchor ? bookPart + bookAnchor : bookPart
+            reader.view.goTo(target)
+        }
+    } catch (e) {
+        console.error(e)
+    }
 }
+
+init()

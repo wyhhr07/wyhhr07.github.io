@@ -5,7 +5,7 @@ export const makeComicBook = ({ entries, loadBlob, getSize }, file) => {
         if (cache.has(name)) return cache.get(name)
         const src = URL.createObjectURL(await loadBlob(name))
         const page = URL.createObjectURL(
-            new Blob([`<body style="margin: 0"><img src="${src}">`], { type: 'text/html' }))
+            new Blob([`<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin: 0"><img src="${src}"></body></html>`], { type: 'text/html' }))
         urls.set(name, [src, page])
         cache.set(name, page)
         return page
@@ -20,7 +20,7 @@ export const makeComicBook = ({ entries, loadBlob, getSize }, file) => {
     const files = entries
         .map(entry => entry.filename)
         .filter(name => exts.some(ext => name.endsWith(ext)))
-        .sort()
+        .sort(new Intl.Collator([], { numeric: true }).compare)
     if (!files.length) throw new Error('No supported image files in archive')
 
     const book = {}
