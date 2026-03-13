@@ -110,7 +110,7 @@ class Reader {
             menu.element.classList.toggle('show'))
         menu.groups.layout.select('paginated')
     }
-    async open(file) {
+    async open(file, initialLocation = null) {
         this.view = document.createElement('foliate-view')
         document.body.append(this.view)
         await this.view.open(file)
@@ -125,7 +125,18 @@ class Reader {
             })
         })
         this.view.renderer.setStyles?.(getCSS(this.style))
-        this.view.renderer.next()
+        // 判断是跳转到指定位置还是默认第一页 ---
+        if (initialLocation) {
+            try {
+                console.log("跳转至:", target)
+                await this.view.goTo(initialLocation)
+            } catch (e) {
+                console.error("初始化导航失败:", e)
+                this.view.renderer.next()
+            }
+        } else {
+            this.view.renderer.next()
+        }
 
         $('#header-bar').style.visibility = 'visible'
         $('#nav-bar').style.visibility = 'visible'
@@ -216,19 +227,16 @@ class Reader {
 }
 
 const open = async file => {
-    document.body.removeChild($('#drop-target'))
+    const dropTarget = $('#drop-target')
+    if (dropTarget) document.body.removeChild(dropTarget)
     const reader = new Reader()
     globalThis.reader = reader
-    await reader.open(file)
-    // 跳转到指定章节
+    // 预先构造目标位置
+    let target = null
     if (bookPart) {
-        const target = bookPart + (bookAnchor || '')
-        try {
-            await reader.view.goTo(target)
-        } catch (e) {
-            console.error("跳转失败:", e)
-        }
+        target = bookPart + (bookAnchor || '')
     }
+    await reader.open(file, target)
 }
 
 const dragOverHandler = e => e.preventDefault()
