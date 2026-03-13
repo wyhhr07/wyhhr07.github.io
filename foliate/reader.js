@@ -128,7 +128,7 @@ class Reader {
         // 判断是跳转到指定位置还是默认第一页 ---
         if (initialLocation) {
             try {
-                console.log("跳转至:", target)
+                console.log("跳转至:", initialLocation)
                 await this.view.goTo(initialLocation)
             } catch (e) {
                 console.error("初始化导航失败:", e)
