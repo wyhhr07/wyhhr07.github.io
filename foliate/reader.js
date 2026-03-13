@@ -246,13 +246,10 @@ async function init() {
         return
     }
     try {
-        await open(`/${encodeURIComponent(bookName)}`)
-
+        const reader = await open(`/${encodeURIComponent(bookName)}`)
         if (bookPart) {
             const target = bookAnchor ? bookPart + bookAnchor : bookPart
-            reader.view.addEventListener("load", () => {
-                reader.view.goTo(target).catch(console.error)
-            }, { once: true })
+            reader.view.goTo(target)
         }
     } catch (e) {
         console.error(e)
