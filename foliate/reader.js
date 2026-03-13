@@ -250,7 +250,9 @@ async function init() {
 
         if (bookPart) {
             const target = bookAnchor ? bookPart + bookAnchor : bookPart
-            reader.view.goTo(target)
+            reader.view.addEventListener("load", () => {
+                reader.view.goTo(target).catch(console.error)
+            }, { once: true })
         }
     } catch (e) {
         console.error(e)
