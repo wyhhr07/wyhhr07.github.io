@@ -3,6 +3,13 @@ import { createTOCView } from './ui/tree.js'
 import { createMenu } from './ui/menu.js'
 import { Overlayer } from './overlayer.js'
 
+const { search, hash } = window.location
+const params = new URLSearchParams(search)
+
+const bookName = params.get("book")
+const bookPart = params.get("part")
+const bookAnchor = hash
+
 const getCSS = ({ spacing, justify, hyphenate }) => `
     @namespace epub "http://www.idpf.org/2007/ops";
     html {
@@ -213,6 +220,15 @@ const open = async file => {
     const reader = new Reader()
     globalThis.reader = reader
     await reader.open(file)
+    // 跳转到指定章节
+    if (bookPart) {
+        const target = bookPart + (bookAnchor || '')
+        try {
+            await reader.view.goTo(target)
+        } catch (e) {
+            console.error("跳转失败:", e)
+        }
+    }
 }
 
 const dragOverHandler = e => e.preventDefault()
@@ -233,27 +249,8 @@ $('#file-input').addEventListener('change', e =>
     open(e.target.files[0]).catch(e => console.error(e)))
 $('#file-button').addEventListener('click', () => $('#file-input').click())
 
-const { search, hash } = window.location
-const params = new URLSearchParams(search)
-
-const bookName = params.get("book")
-const bookPart = params.get("part")
-const bookAnchor = hash
-
-async function init() {
-    if (!bookName) {
-        dropTarget.style.visibility = "visible"
-        return
-    }
-    try {
-        const reader = await open(`/${encodeURIComponent(bookName)}`)
-        if (bookPart) {
-            const target = bookAnchor ? bookPart + bookAnchor : bookPart
-            reader.view.goTo(target)
-        }
-    } catch (e) {
-        console.error(e)
-    }
+if (bookName) {
+    open(`/${encodeURIComponent(bookName)}`).catch(e => console.error(e))
+} else {
+    dropTarget.style.visibility = 'visible'
 }
-
-init()
