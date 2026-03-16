@@ -82,7 +82,7 @@ const filter = SHOW_ELEMENT | SHOW_TEXT | SHOW_CDATA_SECTION
 // which makes the visible range include an extra space at column boundaries
 const getBoundingClientRect = target => {
     let top = Infinity, right = -Infinity, left = Infinity, bottom = -Infinity
-    for (const rect of target.getClientRects()) {
+    for (const rect of Array.from(target.getClientRects?.() || [])) {
         left = Math.min(left, rect.left)
         top = Math.min(top, rect.top)
         right = Math.max(right, rect.right)
@@ -921,12 +921,12 @@ export class Paginator extends HTMLElement {
     async #scrollToAnchor(anchor, reason = 'anchor') {
         this.#anchor = anchor
         const rects = uncollapse(anchor)?.getClientRects?.()
+        const list = Array.from(rects || [])
         // if anchor is an element or a range
-        if (rects) {
+        if (list.length) {
             // when the start of the range is immediately after a hyphen in the
             // previous column, there is an extra zero width rect in that column
-            const rect = Array.from(rects)
-                .find(r => r.width > 0 && r.height > 0) || rects[0]
+            const rect = list.find(r => r.width > 0 && r.height > 0) || list[0]
             if (!rect) return
             await this.#scrollToRect(rect, reason)
             return
