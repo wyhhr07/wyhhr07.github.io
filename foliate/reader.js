@@ -113,7 +113,12 @@ class Reader {
     async open(file, initialLocation = null) {
         this.view = document.createElement('foliate-view')
         document.body.append(this.view)
+        const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent)
         await this.view.open(file)
+        this.view.renderer.setAttribute(
+            'flow',
+            isMobile ? 'scrolled' : 'paginated'
+        )
         this.view.addEventListener('load', this.#onLoad.bind(this))
         this.view.addEventListener('relocate', this.#onRelocate.bind(this))
 
