@@ -114,13 +114,12 @@ class Reader {
         this.view = document.createElement('foliate-view')
         document.body.append(this.view)
         const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent)
-        
         await this.view.open(file)
         const flow = isMobile ? 'scrolled' : 'paginated'
-        requestAnimationFrame(() => {
+        this.view.addEventListener('load', () => {
             this.view.renderer.setAttribute('flow', flow)
-        })
-        this.menu.groups.layout.select(flow)
+            this.menu.groups.layout.select(flow)
+        }, { once: true })
         this.view.addEventListener('load', this.#onLoad.bind(this))
         this.view.addEventListener('relocate', this.#onRelocate.bind(this))
 
