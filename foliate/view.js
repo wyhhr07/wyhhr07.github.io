@@ -456,12 +456,19 @@ export class View extends HTMLElement {
         }
     }
     async goTo(target) {
+        if (typeof target === "string") {
+            target = target.replace(/^\/+/, '')
+        }
         const resolved = this.resolveNavigation(target)
+        if (!resolved || resolved.index == null) {
+            console.error(`Invalid navigation target: ${target}`)
+            return
+        }
         try {
             await this.renderer.goTo(resolved)
             this.history.pushState(target)
             return resolved
-        } catch(e) {
+        } catch (e) {
             console.error(e)
             console.error(`Could not go to ${target}`)
         }
