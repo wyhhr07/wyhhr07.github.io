@@ -1,9 +1,15 @@
 if (!Object.groupBy) {
     Object.groupBy = function (items, callback) {
-        return items.reduce((result, item) => {
+        const result = {};
+
+        for (const item of items) {
             const key = callback(item);
-            (result[key] = result[key] || []).push(item);
-            return result;
-        }, {});
+            if (!result[key]) {
+                result[key] = [];
+            }
+            result[key].push(item);
+        }
+
+        return result;
     };
 }
