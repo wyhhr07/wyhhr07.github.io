@@ -108,17 +108,19 @@ class Reader {
         $('#menu-button').append(menu.element)
         $('#menu-button > button').addEventListener('click', () =>
             menu.element.classList.toggle('show'))
-        menu.groups.layout.select('scrolled')
+        this.menu = menu
     }
     async open(file, initialLocation = null) {
         this.view = document.createElement('foliate-view')
         document.body.append(this.view)
         const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent)
+        
         await this.view.open(file)
-        this.view.renderer.setAttribute(
-            'flow',
-            isMobile ? 'scrolled' : 'paginated'
-        )
+        const flow = isMobile ? 'scrolled' : 'paginated'
+        requestAnimationFrame(() => {
+            this.view.renderer.setAttribute('flow', flow)
+        })
+        this.menu.groups.layout.select(flow)
         this.view.addEventListener('load', this.#onLoad.bind(this))
         this.view.addEventListener('relocate', this.#onRelocate.bind(this))
 
