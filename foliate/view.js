@@ -30,7 +30,10 @@ const isFBZ = ({ name, type }) =>
 const makeZipLoader = async file => {
     const { configure, ZipReader, BlobReader, TextWriter, BlobWriter } =
         await import('./vendor/zip.js')
-    configure({ useWebWorkers: false })
+    configure({
+        useWebWorkers: false,
+        useCompressionStream: false
+    })
     const reader = new ZipReader(new BlobReader(file))
     const entries = await reader.getEntries()
     const map = new Map(entries.map(entry => [entry.filename, entry]))
