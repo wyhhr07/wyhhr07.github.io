@@ -129,16 +129,19 @@ class Reader {
         })
         this.view.renderer.setStyles?.(getCSS(this.style))
         this.view.renderer.setAttribute('flow', defaultFlow)
-        this.view.addEventListener('load', () => {
-            if (bookPart) {
+        if (bookPart) {
+            try {
                 const target = bookPart.replace(/^\/+/, '') + (bookAnchor || '')
-                this.view.goTo(target).catch(e => console.error(e))
-                console.log("跳转至:", bookPart)
-            } else {
-                this.view.renderer.next().catch(e => console.error(e))
-                console.log("初始化导航失败:")
+                console.log("跳转至:", target)
+                await this.view.goTo(target)
+            } catch (e) {
+                console.error("跳转失败:", e)
+                this.view.renderer.next()
             }
-        }, { once: true })
+        } else {
+            this.view.renderer.next()
+        }
+
         $('#header-bar').style.visibility = 'visible'
         $('#nav-bar').style.visibility = 'visible'
         $('#left-button').addEventListener('click', () => this.view.goLeft())
