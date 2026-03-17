@@ -20,7 +20,7 @@ async function createStreamer() {
        * First you need to fetch your book. 
        * It can be from anywhere, local, remote, etc.
        */
-      const epubResponse = await fetch("books/如何阅读西方经典.epub")
+      const epubResponse = await fetch("books/少有人走的路.epub")
 
       const epubBlob = await epubResponse.blob()
 
