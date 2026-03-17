@@ -132,12 +132,13 @@ class Reader {
         this.view.addEventListener('load', () => {
             if (bookPart) {
                 const target = bookPart.replace(/^\/+/, '') + (bookAnchor || '')
-                requestAnimationFrame(() => {
-                    this.view.goTo(target).catch(e => console.error(e))
-                })
+                this.view.goTo(target).catch(e => console.error(e))
+                console.log("跳转至:", bookPart)
+            } else {
+                this.view.renderer.next()
+                console.error("初始化导航失败:", e)
             }
         }, { once: true })
-
         $('#header-bar').style.visibility = 'visible'
         $('#nav-bar').style.visibility = 'visible'
         $('#left-button').addEventListener('click', () => this.view.goLeft())
@@ -207,7 +208,7 @@ class Reader {
     #handleKeydown(event) {
         const k = event.key
         if (k === 'ArrowLeft' || k === 'h') this.view.goLeft()
-        else if (k === 'ArrowRight' || k === 'l') this.view.goRight()
+        else if(k === 'ArrowRight' || k === 'l') this.view.goRight()
     }
     #onLoad({ detail: { doc } }) {
         doc.addEventListener('keydown', this.#handleKeydown.bind(this))
