@@ -132,9 +132,12 @@ class Reader {
         this.view.addEventListener('load', () => {
             if (bookPart) {
                 const target = bookPart.replace(/^\/+/, '') + (bookAnchor || '')
-                this.view.goTo(target).catch(e => console.error(e))
+                requestAnimationFrame(() => {
+                    this.view.goTo(target).catch(e => console.error(e))
+                })
             }
         }, { once: true })
+
         $('#header-bar').style.visibility = 'visible'
         $('#nav-bar').style.visibility = 'visible'
         $('#left-button').addEventListener('click', () => this.view.goLeft())
@@ -204,7 +207,7 @@ class Reader {
     #handleKeydown(event) {
         const k = event.key
         if (k === 'ArrowLeft' || k === 'h') this.view.goLeft()
-        else if(k === 'ArrowRight' || k === 'l') this.view.goRight()
+        else if (k === 'ArrowRight' || k === 'l') this.view.goRight()
     }
     #onLoad({ detail: { doc } }) {
         doc.addEventListener('keydown', this.#handleKeydown.bind(this))
@@ -248,5 +251,5 @@ $('#file-input').addEventListener('change', e =>
     open(e.target.files[0]).catch(e => console.error(e)))
 $('#file-button').addEventListener('click', () => $('#file-input').click())
 
-if (bookName) open(`/${encodeURIComponent(bookName)}`).catch(e => console.error(e))
+if (bookName) open(`/${bookName}`).catch(e => console.error(e))
 else dropTarget.style.visibility = 'visible'
