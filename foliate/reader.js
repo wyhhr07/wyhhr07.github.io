@@ -116,11 +116,10 @@ class Reader {
     async open(file) {
         this.view = document.createElement('foliate-view')
         document.body.append(this.view)
-        this.view.renderer.setAttribute('flow', defaultFlow)
         await this.view.open(file)
         this.view.addEventListener('load', this.#onLoad.bind(this))
         this.view.addEventListener('relocate', this.#onRelocate.bind(this))
-
+        
         const { book } = this.view
         book.transformTarget?.addEventListener('data', ({ detail }) => {
             detail.data = Promise.resolve(detail.data).catch(e => {
@@ -129,6 +128,7 @@ class Reader {
             })
         })
         this.view.renderer.setStyles?.(getCSS(this.style))
+        this.view.renderer.setAttribute('flow', defaultFlow)
         this.view.addEventListener('load', () => {
             if (bookPart) {
                 const target = bookPart.replace(/^\/+/, '') + (bookAnchor || '')
