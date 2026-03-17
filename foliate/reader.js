@@ -116,8 +116,8 @@ class Reader {
     async open(file) {
         this.view = document.createElement('foliate-view')
         document.body.append(this.view)
-        await this.view.open(file)
         this.view.renderer.setAttribute('flow', defaultFlow)
+        await this.view.open(file)
         this.view.addEventListener('load', this.#onLoad.bind(this))
         this.view.addEventListener('relocate', this.#onRelocate.bind(this))
 
@@ -135,8 +135,8 @@ class Reader {
                 this.view.goTo(target).catch(e => console.error(e))
                 console.log("跳转至:", bookPart)
             } else {
-                this.view.renderer.next()
-                console.error("初始化导航失败:", e)
+                this.view.renderer.next().catch(e => console.error(e))
+                console.log("初始化导航失败:")
             }
         }, { once: true })
         $('#header-bar').style.visibility = 'visible'
