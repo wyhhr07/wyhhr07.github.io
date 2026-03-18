@@ -50,11 +50,6 @@ const getCSS = ({ spacing, justify, hyphenate }) => `
     aside[epub|type~="rearnote"] {
         display: none;
     }
-    foliate-view {
-    height: 100vh !important;
-    display: block !important;
-    visibility: visible !important;
-}
 `
 
 const $ = document.querySelector.bind(document)
@@ -124,7 +119,7 @@ class Reader {
         await this.view.open(file)
         this.view.addEventListener('load', this.#onLoad.bind(this))
         this.view.addEventListener('relocate', this.#onRelocate.bind(this))
-
+        
         const { book } = this.view
         book.transformTarget?.addEventListener('data', ({ detail }) => {
             detail.data = Promise.resolve(detail.data).catch(e => {
@@ -216,7 +211,7 @@ class Reader {
     #handleKeydown(event) {
         const k = event.key
         if (k === 'ArrowLeft' || k === 'h') this.view.goLeft()
-        else if (k === 'ArrowRight' || k === 'l') this.view.goRight()
+        else if(k === 'ArrowRight' || k === 'l') this.view.goRight()
     }
     #onLoad({ detail: { doc } }) {
         doc.addEventListener('keydown', this.#handleKeydown.bind(this))
