@@ -2,10 +2,8 @@
 <meta charset="utf-8">
 <meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' blob: 'unsafe-inline'; font-src 'self' blob: data:; img-src 'self' blob: data:; connect-src 'self' blob: data: *; frame-src blob: data:; object-src blob: data:; form-action 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self'; style-src 'self' blob: 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob: data: *; frame-src blob: data:; object-src blob: data:; form-action 'none';">
 <title>读书可以明理</title>
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
 <style>
 :root {
     --active-bg: rgba(0, 0, 0, .05);
@@ -82,7 +80,16 @@ body {
     top: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+}
+#chapter-title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #nav-bar {
     bottom: 0;
@@ -255,16 +262,6 @@ body {
     fill: Canvas;
     filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .2));
 }
-#chapter-title {
-    flex: 1;                 /* 占据左右按钮中间的所有空间 */
-    text-align: center;      /* 文字居中 */
-    font-size: 0.9rem;       /* 稍微小一点，避免拥挤 */
-    color: GrayText;         /* 颜色调淡一点，或者跟按钮颜色一致 */
-    margin: 0 10px;          /* 左右留一点边距 */
-    white-space: nowrap;     /* 关键：处理超长标题，显示省略号 */
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 </style>
 <input type="file" id="file-input" hidden>
 <div id="drop-target" class="filter">
@@ -317,5 +314,4 @@ body {
         </svg>
     </button>
 </div>
-<script src="polyfill.js"></script>
 <script src="reader.js" type="module"></script>
