@@ -80,6 +80,9 @@ body {
 }
 #header-bar {
     top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 #nav-bar {
     bottom: 0;
@@ -252,6 +255,16 @@ body {
     fill: Canvas;
     filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .2));
 }
+#chapter-title {
+    flex: 1;                 /* 占据左右按钮中间的所有空间 */
+    text-align: center;      /* 文字居中 */
+    font-size: 0.9rem;       /* 稍微小一点，避免拥挤 */
+    color: GrayText;         /* 颜色调淡一点，或者跟按钮颜色一致 */
+    margin: 0 10px;          /* 左右留一点边距 */
+    white-space: nowrap;     /* 关键：处理超长标题，显示省略号 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 </style>
 <input type="file" id="file-input" hidden>
 <div id="drop-target" class="filter">
@@ -280,6 +293,7 @@ body {
             <path d="M 4 6 h 16 M 4 12 h 16 M 4 18 h 16"/>
         </svg>
     </button>
+    <div id="chapter-title"></div>
     <div id="menu-button" class="menu-container">
         <button aria-label="Show settings" aria-haspopup="true">
             <svg class="icon" width="24" height="24" aria-hidden="true">

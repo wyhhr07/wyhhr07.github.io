@@ -218,6 +218,12 @@ class Reader {
     }
     #onRelocate({ detail }) {
         const { fraction, location, tocItem, pageItem } = detail
+        const chapterTitleDisplay = $('#chapter-title');
+        if (chapterTitleDisplay) {
+            const currentTitle = tocItem?.label || "";
+            chapterTitleDisplay.innerText = currentTitle;
+            chapterTitleDisplay.title = currentTitle;
+        }
         const percent = percentFormat.format(fraction)
         const loc = pageItem
             ? `Page ${pageItem.label}`
