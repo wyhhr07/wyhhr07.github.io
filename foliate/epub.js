@@ -457,8 +457,9 @@ class MediaOverlay extends EventTarget {
         this.#itemIndex = itemIndex
         const src = this.#activeAudio?.src
         if (!src || !this.#activeItem) return this.start(this.#sectionIndex + 1)
-
-        const url = URL.createObjectURL(await this.book.loadBlob(src))
+        
+        const blob = await this.book.loadBlob(src)
+        const url = await blobToDataURL(blob)
         const audio = new Audio(url)
         this.#audio = audio
         audio.volume = this.#volume
@@ -483,7 +484,6 @@ class MediaOverlay extends EventTarget {
         audio.addEventListener('playing', () => this.#highlight())
         audio.addEventListener('ended', () => {
             this.#unhighlight()
-            URL.revokeObjectURL(url)
             this.#audio = null
             this.#play(audioIndex + 1, 0).catch(e => this.#error(e))
         })
