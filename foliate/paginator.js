@@ -279,7 +279,20 @@ class View {
 
                 resolve()
             }, { once: true })
-            this.#iframe.src = src
+            if (src.startsWith('data:text/html') || src.startsWith('data:application/xhtml+xml')) {
+                const base64Content = src.split(',')[1]
+                const binaryString = atob(base64Content);
+                const len = binaryString.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                const decoder = new TextDecoder('utf-8');
+                const decodedHtml = decoder.decode(bytes);
+                this.#iframe.srcdoc = decodedHtml;
+            } else {
+                this.#iframe.src = src
+            }
         })
     }
     render(layout) {
