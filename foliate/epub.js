@@ -56,6 +56,13 @@ const ONIX5 = {
     '34': 'issn',
 }
 
+const blobToDataURL = blob => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+})
+
 // convert to camel case
 const camel = x => x.toLowerCase().replace(/[-:](.)/g, (_, g) => g.toUpperCase())
 
@@ -724,7 +731,7 @@ class Loader {
         this.eventTarget.dispatchEvent(event)
         const newData = await event.detail.data
         const newType = await event.detail.type
-        const url = URL.createObjectURL(new Blob([newData], { type: newType }))
+        const url = await blobToDataURL(new Blob([newData], { type: newType }))
         this.#cache.set(href, url)
         this.#refCount.set(href, 1)
         if (parent) {
@@ -750,7 +757,6 @@ class Loader {
         //console.log(`unreferencing ${href}, now ${count}`)
         if (count < 1) {
             //console.log(`unloading ${href}`)
-            URL.revokeObjectURL(this.#cache.get(href))
             this.#cache.delete(href)
             this.#refCount.delete(href)
             // unref children
@@ -904,7 +910,7 @@ class Loader {
         this.unref(item?.href)
     }
     destroy() {
-        for (const url of this.#cache.values()) URL.revokeObjectURL(url)
+        this.#cache.clear()
     }
 }
 
