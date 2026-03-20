@@ -30,10 +30,19 @@ const isFBZ = ({ name, type }) =>
 const makeZipLoader = async file => {
     const { configure, ZipReader, BlobReader, TextWriter, BlobWriter } =
         await import('./vendor/zip.js')
+    const checkNativeZipSupport = () => {
+        if (typeof DecompressionStream === 'undefined') return false;
+        try {
+            new DecompressionStream('deflate-raw');
+            return true; 
+        } catch (e) {
+            return false; 
+        }
+    };
     configure({
         useWebWorkers: false,
-        useCompressionStream: 'DecompressionStream' in window
-    })
+        useCompressionStream: checkNativeZipSupport()
+    });
     const reader = new ZipReader(new BlobReader(file))
     const entries = await reader.getEntries()
     const map = new Map(entries.map(entry => [entry.filename, entry]))
