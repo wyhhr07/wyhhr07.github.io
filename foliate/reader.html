@@ -13,28 +13,6 @@
                object-src blob: data:; 
                form-action 'none';">
 <title>读书可以明理</title>
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
-<script>
-    // 针对某些安卓浏览器（如荣耀、华为）的补丁
-    (function() {
-        if (typeof DecompressionStream !== 'undefined') {
-            try {
-                // 实际测试一下是否支持 deflate-raw
-                new DecompressionStream('deflate-raw');
-            } catch (e) {
-                console.error('检测到不完整的 DecompressionStream 实现，已强制禁用。');
-                // 彻底删除全局变量，让 zip.js 的检测失效
-                window.DecompressionStream = undefined;
-                if (typeof self !== 'undefined') self.DecompressionStream = undefined;
-                
-                // 顺带处理 CompressionStream 预防万一
-                window.CompressionStream = undefined;
-                if (typeof self !== 'undefined') self.CompressionStream = undefined;
-            }
-        }
-    })();
-</script>
 <style>
 :root {
     --active-bg: rgba(0, 0, 0, .05);
